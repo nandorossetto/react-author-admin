@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import $ from 'jquery';
 import Input from './inputs';
+import Errors from './errors'
 
 export default class Register extends Component{
 	constructor() {
@@ -45,7 +46,9 @@ export default class Register extends Component{
 				window.$this.setState({list: data});
 			}, 
 			error: function(data){
-				console.log('error', data);
+				if(data.status === 400){
+					new Errors().validate(data.responseJSON);
+			}
 			}
 		})
 	}
