@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import $ from 'jquery';
 import Input from './inputs';
-import Errors from './errors'
+import Errors from './errors';
+import PubSub from 'pubsub-js';
 
 export default class Register extends Component{
 	constructor() {
@@ -44,11 +45,17 @@ export default class Register extends Component{
 			}),
 			success: function(data){
 				window.$this.setState({list: data});
-			}, 
+				this.setState({nome:'',email:'',senha:''});
+
+			}.bind(this), 
 			error: function(data){
 				if(data.status === 400){
 					new Errors().validate(data.responseJSON);
-			}
+				}
+
+			},
+			beforeSend: function(){
+				PubSub.publish('clean-fields', {});
 			}
 		})
 	}

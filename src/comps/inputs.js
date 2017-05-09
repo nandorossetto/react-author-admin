@@ -19,9 +19,16 @@ export default class Inputs extends Component{
 
 	componentDidMount(){
 		PubSub.subscribe('not-valid',function(topic, error){
-	    	this.setState({errorMessage: error.defaultMessage});
+			if(error.field === this.props.name){
+				this.setState({errorMessage: error.defaultMessage});
+			}
 
-		}.bind(this));    
+		}.bind(this));
+
+		PubSub.subscribe('clean-fields',function(topic){
+			this.setState({errorMessage: ''});
+
+		}.bind(this));   
 	 
 	}
 }
